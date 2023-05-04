@@ -1,15 +1,13 @@
 package dev.armacki.echawatcher.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 public class SubstanceHazard {
 

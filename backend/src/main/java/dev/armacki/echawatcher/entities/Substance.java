@@ -1,30 +1,36 @@
 package dev.armacki.echawatcher.entities;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
-@Table(name = "substance", indexes = @Index(name = "idx_substance_index", columnList = "index"))
+@Table(name = "substance")
 public class Substance {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Id long id;
 
+    @Nonnull
+    @Column(nullable = false)
     private String index;
+
+    @Nonnull
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "ec_no")
+    @Nonnull
+    @Column(name = "ec_no", nullable = false)
     private String ecNo;
 
-    @Column(name = "cas_no")
+    @Nonnull
+    @Column(name = "cas_no", nullable = false)
     private String casNo;
 
     @Column(name = "creation_date")

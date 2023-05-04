@@ -2,16 +2,14 @@ package dev.armacki.echawatcher.entities;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode
 @Table(name = "hazard")
 @Entity
 public class Hazard {
