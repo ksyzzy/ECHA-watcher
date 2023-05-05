@@ -19,6 +19,8 @@ public class EntityMapperService {
             "SubstanceHazard", "SubstanceHazardDTO"
     );
 
+    private final String DTO_PACKAGE_PATH = "dev.armacki.echawatcher.dtos";
+
     public Object mapObject(Object sourceObj, String destinationClassName) {
         if (sourceObj == null)
             throw new IllegalArgumentException("Source object is null");
@@ -34,7 +36,7 @@ public class EntityMapperService {
 
         Object destinationObj;
         try {
-            destinationObj = dozerMapper.map(sourceObj, Class.forName(destinationClassName));
+            destinationObj = dozerMapper.map(sourceObj, Class.forName(DTO_PACKAGE_PATH + "." + destinationClassName));
         } catch (ClassNotFoundException ex) {
             logger.warn(String.format("Class name %s not found", destinationClassName), ex);
             return null;
