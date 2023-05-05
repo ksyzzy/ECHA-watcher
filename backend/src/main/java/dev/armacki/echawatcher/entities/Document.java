@@ -6,13 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "document_file")
-public class Document implements Serializable {
+public class Document {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Id long id;
