@@ -25,13 +25,29 @@ public class DocumentController {
         } catch (EntityNotFoundException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
-
     }
 
-//    @GetMapping("/")
-//    public ResponseEntity<List<DocumentDTO>> getDocuments(@RequestParam("page") String page,
-//                                                          @RequestParam("size") String size)
-//    {
-//
-//    }
+    @GetMapping()
+    public Object getDocumentsPageSize(
+            @RequestParam(name = "page", required = false) String page,
+            @RequestParam(name = "size", required = false) String size)
+    {
+        int pageValue = 0;
+        int sizeValue = 50;
+        try {
+            pageValue = Integer.parseInt(page);
+        } catch (NumberFormatException ex) {
+            if (page != null)
+                return new ResponseEntity<>("Invalid page format", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            sizeValue = Integer.parseInt(size);
+        } catch (NumberFormatException ex) {
+            if (size != null)
+                return new ResponseEntity<>("Invalid size format", HttpStatus.BAD_REQUEST);
+        }
+
+        List<DocumentDTO> documents = documentService.getDocuments(pageValue, sizeValue);
+        return new ResponseEntity<>(documents, HttpStatus.OK);
+    }
 }
