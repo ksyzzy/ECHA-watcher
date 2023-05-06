@@ -16,9 +16,9 @@ import java.security.NoSuchAlgorithmException;
 @Component
 public class HashService {
 
-    private final Logger logger = LoggerFactory.getLogger(HashService.class);
+    private static final Logger logger = LoggerFactory.getLogger(HashService.class);
 
-    public String generateChecksum(String filePath) throws IOException {
+    public static String generateChecksum(String filePath) throws IOException {
         byte[] hash;
         try {
             Path path = Paths.get(filePath);

@@ -35,7 +35,7 @@ public class FileSystemRepository {
     }
 
     public String saveFile(byte[] content, String filename) {
-        Path file = Paths.get(RESOURCE_DIR + new Date().getTime() + "-" + filename);
+        Path file = Paths.get(RESOURCE_DIR + "/" + new Date().getTime() + "-" + filename);
         try {
             Files.createDirectories(file.getParent());
             Files.write(file, content);
@@ -45,5 +45,16 @@ public class FileSystemRepository {
         }
 
         return file.toAbsolutePath().toString();
+    }
+
+    public boolean removeFile(String filePath) {
+        Path file = Paths.get(filePath);
+        try {
+            Files.deleteIfExists(file);
+        } catch (IOException ex) {
+            logger.warn(String.format("Could not remove file at %s", filePath), ex);
+            return false;
+        }
+        return true;
     }
 }

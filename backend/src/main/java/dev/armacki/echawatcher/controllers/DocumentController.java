@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 @AllArgsConstructor
@@ -49,5 +52,11 @@ public class DocumentController {
 
         List<DocumentDTO> documents = documentService.getDocuments(pageValue, sizeValue);
         return new ResponseEntity<>(documents, HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public Object postNewDocument(@RequestParam("file") MultipartFile file) throws IOException {
+        boolean result = documentService.handleFileUpload(file);
+        return new ResponseEntity<>(result ? "Dobrze" : "Niedobrze", HttpStatus.OK);
     }
 }

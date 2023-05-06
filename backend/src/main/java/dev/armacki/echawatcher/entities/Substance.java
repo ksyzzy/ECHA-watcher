@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -12,24 +13,20 @@ import java.util.Set;
 @EqualsAndHashCode
 @Entity
 @Table(name = "substance")
-public class Substance {
+public class Substance implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Id long id;
 
-    @Nonnull
     @Column(nullable = false)
     private String index;
 
-    @Nonnull
     @Column(nullable = false)
     private String name;
 
-    @Nonnull
     @Column(name = "ec_no", nullable = false)
     private String ecNo;
 
-    @Nonnull
     @Column(name = "cas_no", nullable = false)
     private String casNo;
 

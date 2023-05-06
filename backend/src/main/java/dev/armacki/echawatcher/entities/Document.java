@@ -1,10 +1,7 @@
 package dev.armacki.echawatcher.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
@@ -23,4 +20,16 @@ public class Document {
 
     @Column(nullable = false)
     private long version;
+
+    @Column(name = "changeset_name")
+    private String changesetName;
+
+    @Column(name = "is_actual")
+    private boolean isActual;
+
+    public Document(String name, String md5Checksum, long version) {
+        this.name = name;
+        this.md5Checksum = md5Checksum;
+        this.version = version;
+    }
 }

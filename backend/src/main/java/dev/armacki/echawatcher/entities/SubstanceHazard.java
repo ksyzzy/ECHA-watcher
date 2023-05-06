@@ -3,13 +3,14 @@ package dev.armacki.echawatcher.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-public class SubstanceHazard {
+public class SubstanceHazard implements Serializable {
 
     @EmbeddedId
     private SubstanceHazardKey id;
