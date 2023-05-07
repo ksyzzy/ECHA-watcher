@@ -31,6 +31,6 @@ public class Hazard implements Serializable {
     private Timestamp updateDate;
 
     @OneToMany(mappedBy = "hazard")
-    private Set<SubstanceHazard> substanceHazardList;
+    private Set<SubstanceHazard> substanceHazardSet;
 
 }

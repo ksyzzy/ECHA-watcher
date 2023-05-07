@@ -15,12 +15,12 @@ public class SubstanceHazard implements Serializable {
     @EmbeddedId
     private SubstanceHazardKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("substanceIndex")
     @JoinColumn(name = "substance_index")
     private Substance substance;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("hazardId")
     @JoinColumn(name = "hazard_id")
     private Hazard hazard;

@@ -36,6 +36,6 @@ public class Substance implements Serializable {
     @Column(name = "update_date")
     private Timestamp updateDate;
 
-    @OneToMany
-    private Set<SubstanceHazard> substanceHazardList;
+    @OneToMany(mappedBy = "substance", fetch = FetchType.LAZY)
+    private Set<SubstanceHazard> substanceHazardSet;
 }
