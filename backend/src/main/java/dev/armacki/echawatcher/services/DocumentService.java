@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class DocumentService {
     private final Logger logger = LoggerFactory.getLogger(DocumentService.class);
     private final DocumentRepository documentRepository;
     private final SubstanceRepository substanceRepository;
+    private final DocumentAnalyzer documentAnalyzer;
     private final EntityMapperService entityMapperService;
     private final FileSystemRepository fileSystemRepository;
 
@@ -39,7 +41,12 @@ public class DocumentService {
         return (DocumentDTO) entityMapperService.mapObject(document, DocumentDTO.class.getSimpleName());
     }
 
-    public boolean handleFileUpload(MultipartFile file) throws IOException {
+    public boolean checkIfDocumentValid(String filePath) throws FileNotFoundException {
+        DocumentStatus documentStatus = documentAnalyzer.checkStructure(filePath);
+        return documentStatus == DocumentStatus.VALID;
+    }
+
+    public String handleFileUpload(MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         byte[] content = file.getBytes();
         String filePath = fileSystemRepository.saveFile(content, filename);
@@ -49,13 +56,11 @@ public class DocumentService {
             documentRepository.save(document);
         }
 
-        DocumentStatus documentStatus = DocumentAnalyzer.checkStructure(filePath);
-        return documentStatus == DocumentStatus.VALID;
+        return filePath;
     }
 
-    public void generateChangeSet() {
-
-
+    public String generateChangeSet(String filePath) throws IOException {
+        return documentAnalyzer.generateChangeset(filePath);
     }
 
     public DocumentDTO getDocumentById(long id) {

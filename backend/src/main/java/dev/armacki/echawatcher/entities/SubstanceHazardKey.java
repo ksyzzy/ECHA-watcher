@@ -3,15 +3,17 @@ package dev.armacki.echawatcher.entities;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Data
 @Embeddable
 public class SubstanceHazardKey implements Serializable {
 
-    @Column(name = "substance_index", nullable = false)
-    private long substanceIndex;
+    @Column(name = "substance_id")
+    private Long substanceId;
 
-    @Column(name = "hazard_id", nullable = false)
-    private long hazardId;
+    @Column(name = "hazard_id")
+    private Long hazardId;
 }

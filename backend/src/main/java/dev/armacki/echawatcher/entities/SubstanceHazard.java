@@ -7,20 +7,18 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode
 @Entity
 public class SubstanceHazard implements Serializable {
 
     @EmbeddedId
-    private SubstanceHazardKey id;
+    private SubstanceHazardKey id = new SubstanceHazardKey();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("substanceIndex")
-    @JoinColumn(name = "substance_index")
+    @ManyToOne
+    @MapsId("substanceId")
+    @JoinColumn(name = "substance_id")
     private Substance substance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("hazardId")
     @JoinColumn(name = "hazard_id")
     private Hazard hazard;

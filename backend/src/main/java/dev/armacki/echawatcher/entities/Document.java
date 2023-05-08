@@ -4,13 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "document_file")
 public class Document {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id long id;
+    private @Id Long id;
 
     @Column(nullable = false)
     private String name;

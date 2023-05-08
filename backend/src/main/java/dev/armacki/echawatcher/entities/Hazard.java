@@ -1,22 +1,19 @@
 package dev.armacki.echawatcher.entities;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode
-@Table(name = "hazard")
 @Entity
 public class Hazard implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id long id;
+    private @Id Long id;
 
     @Column(unique = true, nullable = false)
     private String name;
@@ -31,6 +28,6 @@ public class Hazard implements Serializable {
     private Timestamp updateDate;
 
     @OneToMany(mappedBy = "hazard")
-    private Set<SubstanceHazard> substanceHazardSet;
+    private Set<SubstanceHazard> substanceHazards = new HashSet<>();
 
 }
