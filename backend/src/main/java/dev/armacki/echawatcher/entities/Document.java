@@ -9,7 +9,7 @@ import lombok.*;
 public class Document {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id Long id;
+    private @Id long id;
 
     @Column(nullable = false)
     private String name;

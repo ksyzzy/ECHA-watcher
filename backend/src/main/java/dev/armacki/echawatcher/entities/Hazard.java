@@ -13,7 +13,7 @@ import java.util.Set;
 public class Hazard implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id Long id;
+    private @Id long id;
 
     @Column(unique = true, nullable = false)
     private String name;

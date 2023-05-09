@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static dev.armacki.echawatcher.helpers.DocumentAnalyzer.SubstanceData;
 import static dev.armacki.echawatcher.helpers.DocumentAnalyzer.HazardData;
@@ -28,27 +29,15 @@ public class HazardService {
         return (HazardDTO) entityMapperService.mapObject(document, HazardDTO.class.getSimpleName());
     }
 
-    public void crossCheckHazards(HashMap<String, SubstanceData> mappedData) {
-        HashMap<String, Long> existingHazards = new HashMap<>();
-        HashMap<String, HazardData> mappedHazards = new HashMap<>();
-        List<String> hazardNames = new ArrayList<>();
-        for (SubstanceData sd : mappedData.values()) {
-            for (HazardData hd : sd.getHazards()) {
-                HazardData result = mappedHazards.putIfAbsent(hd.getName(), hd);
-                if (result != null)
-                    hazardNames.add(hd.getName());
-            }
-        }
+    public void crossCheckHazards(HashMap<String, SubstanceData> mappedData,
+                                  HashMap<String, Long> existingHazards)
+    {
+        List<HazardData> hazards = mappedData.values().stream()
+                .map(SubstanceData::getHazards).flatMap(List::stream).toList();
 
-        List<Hazard> hazardsDB = hazardRepository.findAllByNameIn(hazardNames);
-        for (Hazard hazard : hazardsDB) {
-            existingHazards.putIfAbsent(hazard.getName(), hazard.getId());
-        }
-
-        for (Map.Entry<String, HazardData> entry : mappedHazards.entrySet()) {
-            if (existingHazards.containsKey(entry.getKey())) {
-                mappedHazards.get(entry.getKey()).setDatabaseRecordId(existingHazards.get(entry.getKey()));
-                mappedHazards.get(entry.getKey()).setOperation(DocumentAnalyzer.DatabaseOperation.NO_CHANGE);
+        for (HazardData hazard : hazards) {
+            if (existingHazards.containsKey(hazard.getName())) {
+                hazard.setDatabaseRecordId(existingHazards.get(hazard.getName()));
             }
         }
     }

@@ -1,6 +1,5 @@
 package dev.armacki.echawatcher.entities;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
@@ -12,8 +11,8 @@ import java.io.Serializable;
 public class SubstanceHazardKey implements Serializable {
 
     @Column(name = "substance_id")
-    private Long substanceId;
+    private long substanceId;
 
     @Column(name = "hazard_id")
-    private Long hazardId;
+    private long hazardId;
 }

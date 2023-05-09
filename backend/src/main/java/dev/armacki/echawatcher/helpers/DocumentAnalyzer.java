@@ -6,10 +6,7 @@ import dev.armacki.echawatcher.entities.Substance;
 import dev.armacki.echawatcher.entities.SubstanceHazard;
 import dev.armacki.echawatcher.repositories.SubstanceRepository;
 import dev.armacki.echawatcher.services.HazardService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -33,6 +30,7 @@ import java.util.stream.Collectors;
 public class DocumentAnalyzer {
 
     @Getter @Setter
+    @EqualsAndHashCode
     public static class SubstanceData implements Serializable {
         private long databaseRecordId;
         private DatabaseOperation operation = DatabaseOperation.NO_CHANGE;
@@ -45,6 +43,7 @@ public class DocumentAnalyzer {
 
     @Getter @Setter
     @RequiredArgsConstructor
+    @EqualsAndHashCode
     public static class HazardData implements Serializable {
         private long databaseRecordId;
         private DatabaseOperation operation = DatabaseOperation.ADD;
@@ -56,7 +55,7 @@ public class DocumentAnalyzer {
 
     private final SubstanceRepository substanceRepository;
     private final HazardService hazardService;
-    private final int BATCH_SIZE = 1000;
+    private final int BATCH_SIZE = 2000;
     private final List<XLSXCellCoord> requiredCells = new ArrayList<>(Arrays.asList(
             new XLSXCellCoord(4, 0, "Index No"),
             new XLSXCellCoord(4, 1, "International Chemical Identification"),
@@ -122,6 +121,7 @@ public class DocumentAnalyzer {
                                                    List<String> indexes)
     {
         List<Substance> substancesDB = substanceRepository.findAllByIndexIn(indexes);
+        HashMap<String, Long> existingHazardRecords = new HashMap<>();
         for (Substance substanceDB : substancesDB) {
             SubstanceData substanceData = mappedData.get(substanceDB.getIndex());
             if (substanceData == null) {
@@ -144,12 +144,14 @@ public class DocumentAnalyzer {
             Set<SubstanceHazard> substanceHazardSetDB = substanceDB.getSubstanceHazards();
             List<String> substanceHazardSetNamesDB = substanceHazardSetDB.stream()
                     .map(SubstanceHazard::getHazard)
+                    .peek(el -> existingHazardRecords.putIfAbsent(el.getName(), el.getId()))
                     .map(Hazard::getName)
                     .toList();
 
             for (HazardData hd : substanceDataHazards) {
                 if (substanceHazardSetNamesDB.contains(hd.getName())) {
                     hd.setOperation(DatabaseOperation.NO_CHANGE);
+                    hd.setDatabaseRecordId(existingHazardRecords.get(hd.getName()));
                 }
             }
 
@@ -164,7 +166,7 @@ public class DocumentAnalyzer {
             mappedData.remove(substanceDB.getIndex());
         }
         mappedData.values().forEach(el -> el.setOperation(DatabaseOperation.ADD));
-        hazardService.crossCheckHazards(mappedData);
+        hazardService.crossCheckHazards(mappedData, existingHazardRecords);
     }
 
     public Sheet openFile(String filePath) throws FileNotFoundException {

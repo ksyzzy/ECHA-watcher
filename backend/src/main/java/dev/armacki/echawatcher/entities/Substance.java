@@ -13,7 +13,7 @@ import java.util.Set;
 public class Substance implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id Long id;
+    private @Id long id;
 
     @Column(nullable = false)
     private String index;
